@@ -8,11 +8,11 @@
 services = {
     'shadowsocks-1':{
         'port': 4732,
-        'timeout': 20
+        'timeout': 1800
     },
     'vmess': {
         'port': 4892,
-        'timeout': 20
+        'timeout': 1800
     }
 }
 

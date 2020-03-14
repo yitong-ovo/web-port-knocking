@@ -11,7 +11,7 @@ app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False
 knocker = {}
 
-# init_check()
+init_check()
 
 logging.info('init iptables rules. 初始化 iptables 规则。')
 for service_name in services:
