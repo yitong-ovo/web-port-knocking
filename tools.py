@@ -65,7 +65,7 @@ def iptables(action, ip, service_name):
                 command = f'iptables -I INPUT -p {protocol} -s 0.0.0.0/0 --dport {service_port} -j REJECT -m comment --comment "webknock: {service_name}, port: {service_port}, protocol: {protocol}, Reject all IP access."'
                 logging.info('iptables rule does not exist. create rule. iptables 规则不存在，创建规则。')
             else:
-                command = '
+                command = ''
                 logging.info('iptables rule found. Pass. iptables 规则存在，略过。')
         logging.info(f'iptables_command: {command}')
         system(command)
