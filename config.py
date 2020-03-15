@@ -17,6 +17,6 @@ services = {
 }
 
 '''
-protocol 进行过滤的协议
+protocol 进行过滤的协议 会被传入 iptables
 '''
 mode = ['tcp', 'udp']
