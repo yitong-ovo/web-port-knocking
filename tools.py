@@ -57,15 +57,16 @@ def iptables(action, ip, service_name):
     commands = ''
     for protocol in mode:
         if action == 'add':
-            command = f'iptables -I INPUT -p {protocol} -s {ip} --dport {service_port} -j ACCEPT -m comment --comment "webknock: {service_name}, port: {service_port} Allow {ip} access."'
+            command = f'iptables -I INPUT -p {protocol} -s {ip} --dport {service_port} -j ACCEPT -m comment --comment "webknock: {service_name}, port: {service_port}, protocol: {protocol}, Allow {ip} access."'
         elif action == 'del':
-            command = f'iptables -D INPUT -p {protocol} -s {ip} --dport {service_port} -j ACCEPT -m comment --comment "webknock: {service_name}, port: {service_port} Allow {ip} access."'
+            command = f'iptables -D INPUT -p {protocol} -s {ip} --dport {service_port} -j ACCEPT -m comment --comment "webknock: {service_name}, port: {service_port}, protocol: {protocol}, Allow {ip} access."'
         elif action == 'init':
-            if system(f'iptables-save | grep "webknock: {service_name}, port: {service_port} Reject all IP access."') == 256:
-                command = f'iptables -I INPUT -p {protocol} -s 0.0.0.0/0 --dport {service_port} -j REJECT -m comment --comment "webknock: {service_name}, port: {service_port} Reject all IP access."'
+            if system(f'iptables-save | grep "webknock: {service_name}, port: {service_port}, protocol: {protocol}, Reject all IP access."') == 256:
+                command = f'iptables -I INPUT -p {protocol} -s 0.0.0.0/0 --dport {service_port} -j REJECT -m comment --comment "webknock: {service_name}, port: {service_port}, protocol: {protocol}, Reject all IP access."'
                 logging.info('iptables rule does not exist. create rule. iptables 规则不存在，创建规则。')
             else:
-                logging.info('iptables rule found. Pass. iptables 规则存在，掠过。')
+                command = '
+                logging.info('iptables rule found. Pass. iptables 规则存在，略过。')
         logging.info(f'iptables_command: {command}')
         system(command)
         commands = command + ';' + commands
