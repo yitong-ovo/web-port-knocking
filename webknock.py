@@ -23,7 +23,7 @@ def knocking(_service_name):
     if _service_name in services:
         ip = str(flask_get_ip(request))
         if ip in knocker and _service_name in knocker[ip]:
-            service_name, service_port, service_timeout, service_expire_date = knocker_edit(
+            service_name, service_port, service_timeout, service_expire_date, service_last_expire_date = knocker_edit(
                 'update', ip, _service_name, knocker)
             command = ''
             message = f'Closing time will be delayed {service_expire_date}.'
@@ -31,7 +31,7 @@ def knocking(_service_name):
         else:
             if ip not in knocker:
                 knocker[ip] = {}
-            service_name, service_port, service_timeout, service_expire_date = knocker_edit(
+            service_name, service_port, service_timeout, service_expire_date, service_last_expire_date = knocker_edit(
                 'add', ip, _service_name, knocker)
             command = iptables('add', ip, _service_name)
             message = f'Door opened. Port {service_port} of service {service_name} will be opened for {ip} to {service_expire_date}'
@@ -43,7 +43,8 @@ def knocking(_service_name):
             'service_name': _service_name,
             'service_timeout': service_timeout,
             'service_port': service_port,
-            'expire_date': knocker[ip][_service_name]['expire_date'],
+            'expire_date': service_expire_date,
+            'last_expire_date': service_last_expire_date,
             'message': message,
             'message_zh': message_zh,
         }

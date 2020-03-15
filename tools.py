@@ -41,15 +41,16 @@ def knocker_edit(action, ip, service_name, knocker):
         knocker[ip][service_name]['timeout'] = service_timeout
         knocker[ip][service_name]['expire_date'] = service_expire_date = datetime.now() + \
             timedelta(seconds=service_timeout)
-        return service_name, service_port, service_timeout, service_expire_date
+        return service_name, service_port, service_timeout, service_expire_date, ''
     elif action == 'del':
         knocker[ip].pop(service_name)
         if len(knocker[ip]) == 0:
             knocker.pop(ip)
     elif action == 'update':
+        service_last_expire_date = knocker[ip][service_name]['expire_date']
         knocker[ip][service_name]['expire_date'] = service_expire_date = datetime.now() + \
             timedelta(seconds=service_timeout)
-        return service_name, service_port, service_timeout, service_expire_date
+        return service_name, service_port, service_timeout, service_expire_date, service_last_expire_date
 
 
 def iptables(action, ip, service_name):
