@@ -2,6 +2,7 @@ from config import services
 from tools import *
 from flask import Flask, Response, make_response, request, jsonify
 from _thread import start_new_thread
+from werkzeug.middleware.proxy_fix import ProxyFix
 import logging
 
 logging.basicConfig(
@@ -9,6 +10,8 @@ logging.basicConfig(
 
 app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False
+# https://flask.palletsprojects.com/en/1.1.x/deploying/wsgi-standalone/
+app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 knocker = {}
 
 init_check()
@@ -16,12 +19,12 @@ init_check()
 logging.info('init iptables rules. 初始化 iptables 规则。')
 for service_name in services:
     iptables('init', None, service_name)
-    
+
 start_new_thread(timeout_check, (knocker,))
 @app.route('/<_service_name>/knocking', methods=['GET'])
 def knocking(_service_name):
+    ip = str(flask_get_ip(request))
     if _service_name in services:
-        ip = str(flask_get_ip(request))
         if ip in knocker and _service_name in knocker[ip]:
             service_name, service_port, service_timeout, service_expire_date, service_last_expire_date = knocker_edit(
                 'update', ip, _service_name, knocker)
@@ -40,6 +43,7 @@ def knocking(_service_name):
         return_http_code = 200
         return_data = {
             'status': 200,
+            'ip': ip,
             'service_name': _service_name,
             'service_timeout': service_timeout,
             'service_port': service_port,
@@ -59,6 +63,7 @@ def knocking(_service_name):
         return_http_code = 400
         return_data = {
             'status': 400,
+            'ip': ip,
             'error_message': 'service name does not exist',
             'error_message_zh': '服务名称不存在。'
         }
