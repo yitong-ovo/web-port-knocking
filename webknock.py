@@ -10,7 +10,13 @@ logging.basicConfig(
 
 app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False
-# https://flask.palletsprojects.com/en/1.1.x/deploying/wsgi-standalone/
+'''
+https://flask.palletsprojects.com/en/1.1.x/deploying/wsgi-standalone/
+Warning: If you use it in a non-proxy environment, you need to unregister the following line of code. like this:
+# app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
+警告: 如果在非代理环境中使用，需要注销下面这一行代码。像这样:
+# app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
+'''
 app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 knocker = {}
 
