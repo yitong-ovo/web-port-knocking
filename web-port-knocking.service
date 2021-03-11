@@ -1,0 +1,13 @@
+[Unit]
+Description=uWSGI instance to serve web-port-knocking
+After=network.target
+
+[Service]
+User=root
+Group=www-data
+WorkingDirectory=/usr/share/web-port-knocking
+Environment="/usr/share/web-port-knocking/web-port-knocking-venv/bin"
+ExecStart=/usr/share/web-port-knocking/web-port-knocking-venv/bin/uwsgi --ini uwsgi.ini
+
+[Install]
+WantedBy=multi-user.target
