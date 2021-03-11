@@ -11,7 +11,7 @@ $ curl http://localhost:5000/shadowsocks/knocking | jq
 {
   "expire_date": "Sun, 15 Mar 2020 14:34:22 GMT",
   "message": "Door opened. Port 4892 of service shadowsocks will be opened for 10.0.0.247 to 2020-03-15 14:34:22.685407",
-  "message_zh": "门开了， vmess 服务的 4892 端口将会为 10.0.0.247 打开到 2020-03-15 14:34:22.685407。",
+  "message_zh": "门开了， shadowsocks 服务的 4892 端口将会为 10.0.0.247 打开到 2020-03-15 14:34:22.685407。",
   "service_name": "shadowsocks",
   "service_port": 4892,
   "service_timeout": 1800,
